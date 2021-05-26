@@ -16,16 +16,6 @@ public class Mouse : MonoBehaviour {
         clickStream.Subscribe(_ => {
             datastore.inputEvents.Publish(InputEvent.mouseDown);
         });
-        // clickStream.Subscribe(_ => {
-        //     var ray = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        //     hoverHits = Physics2D.RaycastAll(ray, Vector2.zero);
-        //     Debug.Log(hoverHits.Count().ToString());
-        //     if (hoverHits.Count() > 0) {
-        //         datastore.inquireEvents.Publish(
-        //             new HoverEvent() { target = hoverHits.First().collider.gameObject }
-        //         );
-        //     }
-        // });
 
         Observable.EveryUpdate().Where(_ => {
             var ray = Camera.main.ScreenToWorldPoint(Input.mousePosition);
