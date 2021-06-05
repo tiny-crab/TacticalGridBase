@@ -1,6 +1,6 @@
 # TacticalGridBase
 
-### Jun 4
+### Jun 4 - ["Add mouse hover over tile" commit](https://github.com/zakattak/TacticalGridBase/commit/acdf3a63b3a51a94fed1fba8983a812659e76873)
 
 The structure so far:
 
@@ -219,3 +219,12 @@ On top of that, I thought it best to not set up a subscriber for each event type
 
 #### Visuals and Reusability
 I'm trying to have some reusable resources across projects. The Utils script and some basic sprites in the [Solarized Dark colors](https://gist.github.com/ninrod/b0f86d77ebadaccf7d9d4431dd8e2983) I intend on carrying forward. I also hope to extract what I can from the MessageBrokers and input event handlers so that it can be easily dropped into new projects and I've already built up familiarity with them.
+
+#### End Result
+![Ring Tilemap](https://user-images.githubusercontent.com/8145874/120908109-00d0cd00-c61c-11eb-8a94-d730a919ffe3.gif)
+
+![L-shape Tilemap](https://user-images.githubusercontent.com/8145874/120908134-3675b600-c61c-11eb-8e5f-48037447329f.gif)
+
+
+
+
