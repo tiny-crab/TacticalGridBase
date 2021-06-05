@@ -1,4 +1,3 @@
-using System.Net;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
@@ -8,31 +7,33 @@ using System.Linq;
 public class Mouse : MonoBehaviour {
 
     IObservable<long> clickStream = Observable.EveryUpdate().Where(_ => Input.GetMouseButtonDown(0));
-    List<GameObject> hoverHits = new List<GameObject>();
+    Vector3Int hoveredCoord;
     Datastore datastore;
 
     public void Start() {
         datastore = this.GetComponent<Datastore>();
         clickStream.Subscribe(_ => {
-            datastore.inputEvents.Publish(InputEvent.mouseDown);
+            datastore.inputEvents.Publish(
+                new InputEvent() { cell = GetMouseCellPosition() }
+            );
         });
 
         Observable.EveryUpdate().Where(_ => {
-            var ray = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            var tempHits = Physics2D.RaycastAll(ray, Vector2.zero).ToList();
-            if (
-                tempHits.Count() != hoverHits.Count ||
-                tempHits.Any(hit => !hoverHits.Contains(hit.collider.gameObject))
-            ) {
-                hoverHits = tempHits.Select(hit => hit.collider.gameObject).ToList();
+            if (hoveredCoord != GetMouseCellPosition()) {
+                hoveredCoord = GetMouseCellPosition();
                 return true;
             } else {
                 return false;
             }
         }).Subscribe(_ => {
             datastore.inquireEvents.Publish(
-                new HoverEvent() { targets = hoverHits }
+                new HoverEvent() { cell = hoveredCoord }
             );
         });
+    }
+
+    Vector3Int GetMouseCellPosition() {
+        var cellPoint = datastore.activeTilemap.WorldToCell(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+        return new Vector3Int(cellPoint.x, cellPoint.y, 0);
     }
 }

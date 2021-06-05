@@ -1,10 +1,9 @@
 using UnityEngine;
-using System.Collections.Generic;
 
-public enum InputEvent {
-    mouseDown
+public class InputEvent {
+    public Vector3Int cell;
 }
 
 public class HoverEvent {
-    public List<GameObject> targets;
+    public Vector3Int cell;
 }
