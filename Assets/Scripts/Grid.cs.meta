@@ -6,6 +6,7 @@ MonoImporter:
   defaultReferences:
   - baseTileObject: {fileID: 11400000, guid: 50bf0dca3d10545f0bfc70a00b61fba5, type: 2}
   - hoverTileObject: {fileID: 11400000, guid: ff4c27836e1544161a82aed5322ee477, type: 2}
+  - clickTileObject: {fileID: 11400000, guid: 29426e66a1e4b405d9d556f8c9ba16a9, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

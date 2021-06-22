@@ -14,7 +14,10 @@ public class Mouse : MonoBehaviour {
         datastore = this.GetComponent<Datastore>();
         clickStream.Subscribe(_ => {
             datastore.inputEvents.Publish(
-                new InputEvent() { cell = GetMouseCellPosition() }
+                new InputEvent() {
+                    cell = GetMouseCellPosition(),
+                    publisher = this.GetType().Name,
+                }
             );
         });
 
@@ -27,7 +30,10 @@ public class Mouse : MonoBehaviour {
             }
         }).Subscribe(_ => {
             datastore.inquireEvents.Publish(
-                new HoverEvent() { cell = hoveredCoord }
+                new HoverEvent() {
+                    cell = hoveredCoord,
+                    publisher = this.GetType().Name,
+                }
             );
         });
     }

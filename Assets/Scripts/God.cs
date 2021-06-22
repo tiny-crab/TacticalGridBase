@@ -2,31 +2,26 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class God : MonoBehaviour {
-    GameObject container;
 
     Prefabs prefabs;
     Datastore datastore;
-    Mouse mouse;
-    Grid grid;
 
     void Awake() {
-        var container = new GameObject();
-        container.name = "Container";
+        this.gameObject.AddComponent<Prefabs>();
+        this.gameObject.AddComponent<Datastore>();
+        this.gameObject.AddComponent<Mouse>();
+        this.gameObject.AddComponent<Grid>();
+        this.gameObject.AddComponent<UI>();
+        this.gameObject.AddComponent<DebugTools>();
+        this.gameObject.AddComponent<StateMachine>();
 
-        container.AddComponent<Prefabs>();
-        container.AddComponent<Datastore>();
-        container.AddComponent<Mouse>();
-        container.AddComponent<Grid>();
-
-        prefabs = container.GetComponent<Prefabs>();
-        datastore = container.GetComponent<Datastore>();
-        mouse = container.GetComponent<Mouse>();
-        grid = container.GetComponent<Grid>();
+        prefabs = this.gameObject.GetComponent<Prefabs>();
+        datastore = this.gameObject.GetComponent<Datastore>();
     }
 
     void Start() {
         var grid = GameObject.Instantiate(prefabs.gridPrefab);
-        var activeTilemap = GameObject.Instantiate(prefabs.tilemapPrefabs[1]);
+        var activeTilemap = GameObject.Instantiate(prefabs.tilemapPrefabs[0]);
         activeTilemap.transform.SetParent(grid.transform);
 
         datastore.activeTilemap = activeTilemap.GetComponent<Tilemap>();
