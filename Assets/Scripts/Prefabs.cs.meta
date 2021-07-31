@@ -3,7 +3,14 @@ guid: c2595a73a20f749b089661d028e13a86
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - gridPrefab: {instanceID: 0}
+  - baseUnitPrefab: {instanceID: 0}
+  - canvasPrefab: {instanceID: 0}
+  - debugMenuPrefab: {instanceID: 0}
+  - baseTileObject: {fileID: 11400000, guid: 50bf0dca3d10545f0bfc70a00b61fba5, type: 2}
+  - hoverTileObject: {fileID: 11400000, guid: ff4c27836e1544161a82aed5322ee477, type: 2}
+  - clickTileObject: {fileID: 11400000, guid: 27efe9d96da1f46ec8452fc0bbf1ac8f, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

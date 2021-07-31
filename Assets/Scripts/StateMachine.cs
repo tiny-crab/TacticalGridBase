@@ -1,5 +1,6 @@
 using UnityEngine;
 using UniRx;
+using System;
 
 public class StateMachine : MonoBehaviour {
 
@@ -7,27 +8,53 @@ public class StateMachine : MonoBehaviour {
 
     public BoolReactiveProperty active = new BoolReactiveProperty(false);
 
+    public IDisposable inputTransmuter;
+    public IDisposable hoverTransmuter;
+
     void Start() {
         datastore = this.GetComponent<Datastore>();
 
-        // automatically forward any events received to grid
-        // eventually, these events will be transmuted due to the state of the game
-        datastore.inputEvents.Receive<InputEvent>().Subscribe(e => {
-            if (active.Value) {
-                datastore.gridEvents.Publish(new InputEvent() {
-                    cell = e.cell,
-                    publisher = this.GetType().Name,
-                });
+        active.Subscribe(e => {
+            if (e) {
+                StartTransmute();
+            } else {
+                PauseTransmute();
             }
         });
-        datastore.inquireEvents.Receive<HoverEvent>().Subscribe(e => {
-            if (active.Value) {
+    }
+
+    void StartTransmute() {
+        inputTransmuter = datastore.inputEvents.Receive<InputEvent>()
+            .Where(_ => this.active.Value)
+            .Subscribe(e => {
+                if (datastore.units.ContainsKey(e.cell)) {
+                    datastore.gridEvents.Publish(new GridEvent() {
+                        cell = e.cell,
+                        publisher = this.GetType().Name,
+                        action = GridActions.SELECT_UNIT,
+                    });
+                } else {
+                    datastore.gridEvents.Publish(new GridEvent() {
+                        cell = e.cell,
+                        publisher = this.GetType().Name,
+                        action = GridActions.SELECT_TILE,
+                    });
+                }
+            });
+
+        hoverTransmuter = datastore.inquireEvents.Receive<HoverEvent>()
+            .Where(_ => this.active.Value)
+            .Subscribe(e => {
                 datastore.gridEvents.Publish(new HoverEvent() {
                     cell = e.cell,
                     publisher = this.GetType().Name,
                 });
-            }
-        });
+            });
+    }
+
+    void PauseTransmute() {
+        inputTransmuter.Dispose();
+        hoverTransmuter.Dispose();
     }
 
 }

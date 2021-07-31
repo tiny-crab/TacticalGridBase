@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,16 +7,12 @@ using UniRx;
 
 public class Grid : MonoBehaviour
 {
-    public Tile baseTileObject;
-    public Tile hoverTileObject;
-    public Tile clickTileObject;
-
-    Vector3Int hoveredCell;
-    Vector3Int clickedCell;
+    public ReactiveProperty<Vector3Int> hoveredCell = new ReactiveProperty<Vector3Int>();
+    public ReactiveProperty<Vector3Int> clickedCell = new ReactiveProperty<Vector3Int>();
 
     Datastore datastore;
     Prefabs prefabs;
-    Tilemap tiles;
+    public Tilemap tiles;
 
     void Start() {
         datastore = this.GetComponent<Datastore>();
@@ -26,24 +23,18 @@ public class Grid : MonoBehaviour
             if (e.cell == null) { return; }
             else {
                 var prev = hoveredCell;
-                hoveredCell = e.cell;
-                RefreshCell(hoveredCell);
-                RefreshCell(prev);
+                hoveredCell.Value = e.cell;
             }
-        });
-
-        datastore.gridEvents.Receive<InputEvent>().Subscribe(e => {
-            if (e.cell == null) { return; }
-            var prev = clickedCell;
-            clickedCell = e.cell;
-            RefreshCell(clickedCell);
-            RefreshCell(prev);
         });
 
         datastore.gridEvents.Receive<GridEvent>().Subscribe(e => {
             if (e.cell == null) { return; }
             if (e.action == GridActions.SPAWN_UNIT) {
                 SpawnUnitAt(e.cell);
+            } else if (e.action == GridActions.SELECT_UNIT) {
+                SelectTileAt(e.cell);
+            } else if (e.action == GridActions.SELECT_TILE) {
+                SelectTileAt(e.cell);
             }
         });
 
@@ -52,6 +43,10 @@ public class Grid : MonoBehaviour
                 entry.Value.transform.position = tiles.GetCellCenterWorld(entry.Key);
             });
         });
+    }
+
+    public void SelectTileAt(Vector3Int cell) {
+        clickedCell.Value = cell;
     }
 
     public void SpawnUnitAt(Vector3Int cell, GameObject unit = null) {
@@ -70,23 +65,13 @@ public class Grid : MonoBehaviour
         }
     }
 
-    void RefreshCell(Vector3Int cell) {
-        if (!TileExistsAt(cell)) { return; } // never refresh a tile that has not already been instantiated in the grid elsewhere
-
-        if (cell == hoveredCell) {
-            tiles.SetTile(cell, hoverTileObject);
-        } else if (cell == clickedCell) {
-            tiles.SetTile(cell, clickTileObject);
-        }else {
-            tiles.SetTile(cell, baseTileObject);
-        }
-    }
-
-    bool TileExistsAt(Vector3Int cell) {
+    public bool TileExistsAt(Vector3Int cell) {
         return tiles.GetTile(cell) != null;
     }
 }
 
 public enum GridActions {
     SPAWN_UNIT,
+    SELECT_UNIT,
+    SELECT_TILE,
 }

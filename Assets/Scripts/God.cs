@@ -14,6 +14,7 @@ public class God : MonoBehaviour {
         this.gameObject.AddComponent<UI>();
         this.gameObject.AddComponent<DebugTools>();
         this.gameObject.AddComponent<StateMachine>();
+        this.gameObject.AddComponent<GridRenderer>();
 
         prefabs = this.gameObject.GetComponent<Prefabs>();
         datastore = this.gameObject.GetComponent<Datastore>();

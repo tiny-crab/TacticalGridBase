@@ -1,15 +1,16 @@
 using UnityEngine;
 
+// User generates these via Controller classes
 public class InputEvent {
     public Vector3Int cell;
     public string publisher;
 }
-
 public class HoverEvent {
     public Vector3Int cell;
     public string publisher;
 }
 
+// Main events consumed by Grid
 public class GridEvent {
     public Vector3Int cell;
     public string publisher;

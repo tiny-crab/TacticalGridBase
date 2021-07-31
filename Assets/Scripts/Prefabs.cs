@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class Prefabs : MonoBehaviour {
 
@@ -10,6 +12,11 @@ public class Prefabs : MonoBehaviour {
     // UI
     public GameObject canvasPrefab;
     public GameObject debugMenuPrefab;
+
+    // Tiles
+    public Tile baseTileObject;
+    public Tile hoverTileObject;
+    public Tile clickTileObject;
 
     void Awake() {
         gridPrefab = Resources.Load<GameObject>("Prefabs/Grid");
